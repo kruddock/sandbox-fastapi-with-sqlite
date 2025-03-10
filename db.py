@@ -14,10 +14,10 @@ def init_db() -> None:
     SQLModel.metadata.create_all(engine)
     
 def seed() -> None:
-    album1 = Album(title="Winterfall", artist="Dave Wilson", tracks=20)
-    album2 = Album(title="1-2-3", artist="Pedro Parqueador", tracks=8)
-    album3 = Album(title="Essence", artist="Jean Jones", tracks=12)
-    album4 = Album(title="Angella", artist="Angella", tracks=12, is_local=True)
+    album1 = Album(title="A-B-C", artist="John Doe", tracks=20)
+    album2 = Album(title="1-2-3", artist="Jane Doe", tracks=8)
+    album3 = Album(title="Essence", artist="Justin", tracks=12)
+    album4 = Album(title="My Life", artist="Alexis", tracks=12, is_local=True)
 
     with Session(engine) as session:
         session.add_all([album1, album2, album3, album4])
