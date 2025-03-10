@@ -1,0 +1,12 @@
+services:
+  api:
+    container_name: my-fast-api
+    build:
+      context: .
+    image: vsc-my-fast-api
+    working_dir: /api
+    volumes:
+      - ../:/api
+    ports:
+      - '9045:8000'
+    command: "sleep infinity"
