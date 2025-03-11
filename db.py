@@ -14,6 +14,8 @@ def init_db() -> None:
     SQLModel.metadata.create_all(engine)
     
 def seed() -> None:
+    init_db()
+    
     album1 = Album(title="A-B-C", artist="John Doe", tracks=20)
     album2 = Album(title="1-2-3", artist="Jane Doe", tracks=8)
     album3 = Album(title="Essence", artist="Justin", tracks=12)
