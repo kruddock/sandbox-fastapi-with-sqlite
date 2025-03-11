@@ -55,5 +55,3 @@ async def delete_album(id: int, session: Session = Depends(get_session)) -> None
     session.delete(album)
     
     session.commit()
-    # if album is None:
-    #     raise HTTPException(status_code=404, detail="Entity not found")
