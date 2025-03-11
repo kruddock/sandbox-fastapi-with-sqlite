@@ -1,6 +1,6 @@
 # Sandbox FastApi
 
-A small demo using FastApi.
+A small demo using FastApi and sqlite database
 
 ## Prerequisites
 
