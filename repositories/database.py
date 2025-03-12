@@ -29,8 +29,3 @@ def seed() -> None:
     with Session(engine) as session:
         session.add_all([album1, album2, album3, album4, team1, team2, team3, team4])
         session.commit()
-    
-def get_session():
-    with Session(engine) as session:
-        yield session
-        

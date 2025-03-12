@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from routes.album import router as album_routes
 from routes.team import router as team_routes
 
-from db import init_db
+from repositories.database import init_db
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

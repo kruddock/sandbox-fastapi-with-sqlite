@@ -1,28 +1,20 @@
-from fastapi import APIRouter, Depends, HTTPException
-from sqlmodel import Session, select
-from db import get_session
+from fastapi import APIRouter, HTTPException
+from repositories.repository_albums import Repos
 from models import Album
     
 router = APIRouter()
 
-
 @router.get("/albums", response_model=list[Album])
-async def list_albums(session: Session = Depends(get_session)) -> list:
-    return session.exec(select(Album)).all()
+async def list_of_albums(repos: Repos) -> list:
+    return repos.collection()
 
 @router.post("/albums", response_model=Album, status_code=201)
-async def create_album(album: Album, session: Session = Depends(get_session)) -> Album:
-    session.add(album)
-    
-    session.commit()
-    
-    session.refresh(album)
-        
-    return album
+async def create_an_album(album: Album, repos: Repos) -> Album:
+    return repos.add(album)
 
 @router.get("/albums/{id}", response_model=Album)
-async def show_album(id: int, session: Session = Depends(get_session)) -> Album:
-    album = session.get(Album, id)
+async def find_album_by_id(id: int, repos: Repos) -> Album:
+    album = repos.show(id)
     
     if album is None:
         raise HTTPException(status_code=404, detail="Entity not found")
@@ -30,28 +22,17 @@ async def show_album(id: int, session: Session = Depends(get_session)) -> Album:
     return album
 
 @router.put("/albums/{id}", response_model=Album)
-async def update_album(id: int, album: Album, session: Session = Depends(get_session)) -> Album:
-    target = session.get(Album, id)
+async def update_album(id: int, album: Album, repos: Repos) -> Album:
+    modified = repos.update(id, album)
     
-    if target is None:
+    if modified is None:
         raise HTTPException(status_code=404, detail="Entity not found")
     
-    for field, value in album.model_dump().items():
-        setattr(target, field, value)
-        
-    session.commit()
-    
-    session.refresh(target)
-    
-    return target
+    return modified
 
 @router.delete("/albums/{id}", status_code=204)
-async def delete_album(id: int, session: Session = Depends(get_session)) -> None:
-    album = session.get(Album, id)
+async def delete_album(id: int, repos: Repos) -> None:
+    deleted = repos.remove(id)
     
-    if album is None:
+    if deleted is None:
         raise HTTPException(status_code=404, detail="Entity not found")
-    
-    session.delete(album)
-    
-    session.commit()
