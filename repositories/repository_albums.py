@@ -7,9 +7,13 @@ from repositories.base import BaseRespository
 from models import Album
 
 class AlbumRepository(BaseRespository[Album]):
+    def __init__(self, engine):
+        super().__init__()
+        self.engine = engine
+        
     @contextlib.contextmanager
     def get_session(self):
-        with Session(engine) as session:
+        with Session(self.engine) as session:
             yield session
             
     def collection(self):
@@ -59,6 +63,6 @@ class AlbumRepository(BaseRespository[Album]):
             return album
         
 def get_repos() -> AlbumRepository:
-    return AlbumRepository() 
+    return AlbumRepository(engine) 
 
 Repos = Annotated[AlbumRepository, Depends(get_repos)]
