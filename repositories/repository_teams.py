@@ -1,23 +1,11 @@
-import contextlib
 from typing import Annotated
-from sqlmodel import Session, select
+from sqlmodel import select
 from fastapi import Depends
 from repositories.database import engine
 from repositories.base import BaseRespository
 from models import Team
 
 class TeamRepository(BaseRespository[Team]):
-    # def __init_subclass__(cls):
-    #     return super().__init_subclass__()
-    def __init__(self, engine):
-        super().__init__()
-        self.engine = engine
-    
-    @contextlib.contextmanager
-    def get_session(self):
-        with Session(self.engine) as session:
-            yield session
-            
     def collection(self):
         with self.get_session() as session:
             return session.exec(select(Team)).all()
@@ -68,3 +56,4 @@ def get_repos() -> TeamRepository:
     return TeamRepository(engine) 
 
 Repos = Annotated[TeamRepository, Depends(get_repos)]
+
